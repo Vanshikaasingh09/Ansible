@@ -1,0 +1,39 @@
+---
+- name: Configure fake servers
+  hosts: fake_servers
+  become: true
+
+  tasks:
+    - name: Update all packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+
+    - name: Create a test user
+      user:
+        name: testuser
+        state: present
+        password: "{{ 'password' | password_hash('sha512') }}"
+
+    - name: Allow SSH through the firewall
+      ufw:
+        rule: allow
+        name: 'OpenSSH'
+
+    - name: Check disk space
+      command: df -h
+      register: disk_space
+
+    - name: Show disk space
+      debug:
+        msg: "{{ disk_space.stdout }}"

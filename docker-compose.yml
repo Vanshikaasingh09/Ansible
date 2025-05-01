@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  server1:
+    image: ansible-ssh-image
+    container_name: server1
+    ports:
+      - "2223:22"   # <-- changed
+
+  server2:
+    image: ansible-ssh-image
+    container_name: server2
+    ports:
+      - "2224:22"   # <-- changed
+
+  server3:
+    image: ansible-ssh-image
+    container_name: server3
+    ports:
+      - "2225:22"   # <-- changed
